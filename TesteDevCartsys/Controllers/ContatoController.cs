@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TesteDevCartsys.Controllers.Dtos;
 using TesteDevCartsys.Data;
 using TesteDevCartsys.Models;
 
@@ -9,24 +11,37 @@ namespace TesteDevCartsys.Controllers;
 public class ContatoController : ControllerBase
 {
 
-    private static int id = 0;
     private TesteDevCartsysContext _context;
+    private IMapper _mapper;
 
-    public ContatoController(TesteDevCartsysContext context)
+    public ContatoController(TesteDevCartsysContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpPost]
-    public IActionResult AdicionaContato([FromBody] Contato contato)
+    public IActionResult AdicionaContato([FromBody] CreateContatoDto contatoDto)
     {
+        var contato = _mapper.Map<Contato>(contatoDto);
         _context.Contatos.Add(contato);
         _context.SaveChanges();
         return CreatedAtAction(
                 nameof(RetornaContatoPorId),
-                new {id = contato.Id}, 
+                new { id = contato.Id },
                 contato
             );
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult AtualizaContato(int id, [FromBody] UpdateContatoDto contatoDto)
+    {
+        var contato = _context.Contatos.FirstOrDefault(c => c.Id == id);
+        if (contato == null) return NotFound();
+        _mapper.Map(contatoDto, contato);
+        _context.SaveChanges();
+
+        return NoContent();
     }
 
     [HttpGet]

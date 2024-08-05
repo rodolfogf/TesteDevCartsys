@@ -1,6 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using TesteDevCartsys.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("TesteDevCartsysConnection");
 
 // Add services to the container.
+
+builder.Services.AddDbContext<TesteDevCartsysContext>(opts => 
+    opts.UseMySql(
+            connectionString,
+            ServerVersion.AutoDetect(connectionString))
+    );
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -13,6 +13,7 @@ builder.Services.AddDbContext<TesteDevCartsysContext>(opts =>
     );
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 
 builder.Services.AddControllers();

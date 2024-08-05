@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using TesteDevCartsys.Controllers.Dtos;
 using TesteDevCartsys.Data;
@@ -44,10 +45,26 @@ public class ContatoController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet]
-    public IEnumerable<Contato> RetornaContatos(int skip = 0, int take = 10)
+    [HttpPatch("{id}")]
+    public IActionResult AtualizaContatoParcial(int id, JsonPatchDocument<UpdateContatoDto> patch)
     {
-        return _context.Contatos.Skip(skip).Take(take);
+        var contato = _context.Contatos.FirstOrDefault(c => c.Id==id);
+        if (contato == null) return NotFound();
+
+        var contatoAtualizacao = _mapper.Map<UpdateContatoDto>(contato);
+        patch.ApplyTo(contatoAtualizacao, ModelState);
+
+        if (!TryValidateModel(contatoAtualizacao)) return ValidationProblem(ModelState);
+        _mapper.Map(contatoAtualizacao, contato);
+        _context.SaveChanges();
+
+        return NoContent();
+    }
+
+    [HttpGet]
+    public IEnumerable<ReadContatoDto> RetornaContatos(int skip = 0, int take = 10)
+    {
+        return _mapper.Map<List<ReadContatoDto>>(_context.Contatos.Skip(skip).Take(take));
     }
 
     [HttpGet("{id}")]
@@ -55,7 +72,19 @@ public class ContatoController : ControllerBase
     {
         var contato = _context.Contatos.FirstOrDefault(c => c.Id ==  id);
         if (contato == null) return NotFound();
-        return Ok(contato);
+        var contatoDto = _mapper.Map<ReadContatoDto>(contato);
+        return Ok(contatoDto);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeletaContato(int id)
+    {
+        var contato = _context.Contatos.FirstOrDefault(c => c.Id == id);
+        if (contato == null) return NotFound();
+        _context.Remove(contato);
+        _context.SaveChanges();
+
+        return NoContent();
     }
 
 }

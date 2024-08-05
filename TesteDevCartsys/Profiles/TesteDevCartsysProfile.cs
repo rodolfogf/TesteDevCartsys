@@ -10,6 +10,8 @@ namespace TesteDevCartsys.Profiles
         {
             CreateMap<CreateContatoDto, Contato>();
             CreateMap<UpdateContatoDto, Contato>();
+            CreateMap<Contato, UpdateContatoDto>();
+            CreateMap<Contato, ReadContatoDto>();
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using TesteDevCartsys.Controllers.Dtos;
+using TesteDevCartsys.Data.Dtos;
 using TesteDevCartsys.Models;
 
 namespace TesteDevCartsys.Profiles
 {
-    public class TesteDevCartsysProfile : Profile
+    public class ContatoProfile : Profile
     {
-        public TesteDevCartsysProfile()
+        public ContatoProfile()
         {
             CreateMap<CreateContatoDto, Contato>();
             CreateMap<UpdateContatoDto, Contato>();

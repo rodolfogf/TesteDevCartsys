@@ -10,5 +10,7 @@ public class Contato
     [Required(ErrorMessage = "A descrição do contato é obrigatória")]
     [StringLength(60, ErrorMessage = "O tamanho máximo para a descrição é de 60 caracteres")]
     public string Descricao { get; set; }
-    //public TipoContato TipoContato { get; set; }
+    [Required(ErrorMessage = "O id do tipo de contato é obrigatório")]
+    public int TipoContatoId { get; set; }
+    public virtual TipoContato TipoContato { get; set; }
 }

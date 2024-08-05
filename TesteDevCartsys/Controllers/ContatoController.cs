@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using TesteDevCartsys.Controllers.Dtos;
 using TesteDevCartsys.Data;
+using TesteDevCartsys.Data.Dtos;
 using TesteDevCartsys.Models;
 
 namespace TesteDevCartsys.Controllers;

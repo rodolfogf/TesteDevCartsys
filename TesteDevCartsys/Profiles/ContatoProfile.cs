@@ -11,7 +11,9 @@ namespace TesteDevCartsys.Profiles
             CreateMap<CreateContatoDto, Contato>();
             CreateMap<UpdateContatoDto, Contato>();
             CreateMap<Contato, UpdateContatoDto>();
-            CreateMap<Contato, ReadContatoDto>();
+            CreateMap<Contato, ReadContatoDto>().ForMember(
+                contatoDto => contatoDto.TipoContato, 
+                opt => opt.MapFrom(contato => contato.TipoContato));
         }
     }
 }

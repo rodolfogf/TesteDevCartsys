@@ -6,5 +6,5 @@ public class ReadContatoDto
 {
     public string Descricao { get; set; }
     public DateTime HoraConsulta { get; set; } = DateTime.Now;
-    public ReadTipoContatoDto ReadTipoContatoDto { get; set; }
+    public ReadTipoContatoDto TipoContato { get; set; }
 }

@@ -64,7 +64,7 @@ public class ContatoController : ControllerBase
     [HttpGet]
     public IEnumerable<ReadContatoDto> RetornaContatos(int skip = 0, int take = 10)
     {
-        return _mapper.Map<List<ReadContatoDto>>(_context.Contatos.Skip(skip).Take(take));
+        return _mapper.Map<List<ReadContatoDto>>(_context.Contatos.ToList().Skip(skip).Take(take));
     }
 
     [HttpGet("{id}")]

@@ -7,7 +7,7 @@ var connectionString = builder.Configuration.GetConnectionString("TesteDevCartsy
 // Add services to the container.
 
 builder.Services.AddDbContext<TesteDevCartsysContext>(opts => 
-    opts.UseMySql(
+    opts.UseLazyLoadingProxies().UseMySql(
             connectionString,
             ServerVersion.AutoDetect(connectionString))
     );

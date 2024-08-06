@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TesteDevCartsys.Data;
 
@@ -10,9 +11,10 @@ using TesteDevCartsys.Data;
 namespace TesteDevCartsys.Migrations
 {
     [DbContext(typeof(TesteDevCartsysContext))]
-    partial class TesteDevCartsysContextModelSnapshot : ModelSnapshot
+    [Migration("20240806144936_Criação do usuário")]
+    partial class Criaçãodousuário
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TesteDevCartsys.Models;
 
@@ -14,8 +13,7 @@ public class Pessoa
     [Required(ErrorMessage = "A data de nascimento do paciente é obrigatória")]
     [DisplayFormat(DataFormatString = "dd/MM/yyyy")]
     public DateTime DataNascimento { get; set; }
-    [RegularExpression(@"^\d{8}$", ErrorMessage = "Formato inválido de CEP")]
+    [RegularExpression(@"^\d{11}$", ErrorMessage = "Formato inválido de CPF")]
     public string Cpf { get; set; }
-    public ICollection<TipoPessoa> TiposPessoa { get; set; }
-
+    public virtual ICollection<Contato> Contatos { get; set; }
 }

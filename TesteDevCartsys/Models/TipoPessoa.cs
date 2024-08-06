@@ -9,5 +9,4 @@ public class TipoPessoa
     public int Id { get; set; }
     [Required(ErrorMessage = "A descrição do tipo de pessoa é obrigatória")]
     public string Descricao { get; set; }
-    public ICollection<Pessoa> Pessoas { get; set; }
 }

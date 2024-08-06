@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TesteDevCartsys.Data;
+using TesteDevCartsys.Data.Dtos;
+using TesteDevCartsys.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TesteDevCartsysConnection");
@@ -11,6 +14,11 @@ builder.Services.AddDbContext<TesteDevCartsysContext>(opts =>
             connectionString,
             ServerVersion.AutoDetect(connectionString))
     );
+
+builder.Services.AddIdentity<Usuario, IdentityRole>()
+.AddEntityFrameworkStores<TesteDevCartsysContext>()
+.AddDefaultTokenProviders();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers().AddNewtonsoftJson();

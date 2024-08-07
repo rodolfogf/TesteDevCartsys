@@ -53,9 +53,9 @@ builder.Services.AddSingleton<IRazorLightEngine>(new RazorLightEngineBuilder()
     .UseMemoryCachingProvider()
     .Build());
 
-builder.Services.AddSingleton<IConverter, SynchronizedConverter>();
+//builder.Services.AddSingleton<IConverter, SynchronizedConverter>();
 
-builder.Services.AddSingleton<PdfService>();
+//builder.Services.AddSingleton<PdfService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

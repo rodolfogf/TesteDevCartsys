@@ -9,37 +9,32 @@ namespace TesteDevCartsys.Services
 {
     public class PdfService
     {
-        private readonly IRazorLightEngine _razorLightEngine;
         private readonly IConverter _converter;
 
-        public PdfService(IRazorLightEngine razorLightEngine, IConverter converter)
+        public PdfService(IConverter converter)
         {
-            _razorLightEngine = razorLightEngine;
             _converter = converter;
         }
 
-        public async Task<byte[]> GeneratePdfAsync(List<LinhaRelatorio> linhas)
+        public byte[] GeneratePdf(string htmlContent)
         {
-            var html = await _razorLightEngine.CompileRenderAsync("Views/Relatorio.cshtml", linhas);
-
             var doc = new HtmlToPdfDocument()
             {
-                GlobalSettings = new GlobalSettings
-                {
-                    ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Portrait,
-                    PaperSize = PaperKind.A4,
-                },
+                GlobalSettings = {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+            },
                 Objects = {
-                new ObjectSettings
-                {
-                    HtmlContent = html,
+                new ObjectSettings() {
+                    HtmlContent = htmlContent,
                     WebSettings = { DefaultEncoding = "utf-8" },
-                }
+                },
             }
             };
 
             return _converter.Convert(doc);
         }
     }
+
 }

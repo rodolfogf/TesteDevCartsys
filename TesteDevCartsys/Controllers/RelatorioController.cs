@@ -4,23 +4,55 @@ using TesteDevCartsys.Data;
 using TesteDevCartsys.Models;
 using TesteDevCartsys.Views;
 using TesteDevCartsys.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace TesteDevCartsys.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class RelatorioController : ControllerBase
+public class RelatorioController : Controller
 {
     private TesteDevCartsysContext _context;
     private IMapper _mapper;
     private readonly PdfService _pdfService;
-    public RelatorioController(TesteDevCartsysContext context, IMapper mapper, PdfService pdfService)
+    private readonly ICompositeViewEngine _viewEngine;
+    public RelatorioController(TesteDevCartsysContext context, IMapper mapper, PdfService pdfService,ICompositeViewEngine viewEngine)
     {
         _context = context;
         _mapper = mapper;
         _pdfService = pdfService;
-    }    
+        _viewEngine = viewEngine;
+    }
 
+    [HttpGet]
+    private async Task<string> RenderViewToStringAsync(string viewName, object model)
+    {
+        ViewData.Model = model;
+        using (var sw = new StringWriter())
+        {
+            var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+            if (viewResult.View == null)
+            {
+                throw new ArgumentNullException($"{viewName} não foi encontrada.");
+            }
+
+            var viewContext = new ViewContext(
+                ControllerContext,
+                viewResult.View,
+                ViewData,
+                TempData,
+                sw,
+                new HtmlHelperOptions()
+            );
+
+            await viewResult.View.RenderAsync(viewContext);
+            return sw.ToString();
+        }
+    }
+
+    [HttpGet]
     public async Task<IActionResult> GerarRelatorioPdf(Filtro filtro)
     {
         var linhasRelatorio = new List<LinhaRelatorio>();
@@ -60,11 +92,13 @@ public class RelatorioController : ControllerBase
                 };
                 linhasRelatorio.Add(linha);
             }
-        }        
+        }
 
-        var pdf = await _pdfService.GeneratePdfAsync(linhasRelatorio);
+        var htmlContent = await RenderViewToStringAsync("Views/Relatorio.cshtml", linhasRelatorio);
 
-        return File(pdf, "application/pdf", "Relatorio.pdf");
+        var pdfBytes = _pdfService.GeneratePdf(htmlContent);
+
+        return File(pdfBytes, "application/pdf", "Relatorio.pdf");
     }
 }
 

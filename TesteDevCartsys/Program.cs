@@ -1,3 +1,5 @@
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,9 +8,6 @@ using System.Text;
 using TesteDevCartsys.Data;
 using TesteDevCartsys.Models;
 using TesteDevCartsys.Services;
-using DinkToPdf;
-using DinkToPdf.Contracts;
-using RazorLight;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration["ConnectionStrings:TesteDevCartsysConnection"];
@@ -48,14 +47,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddSingleton<IRazorLightEngine>(new RazorLightEngineBuilder()
-    .UseFileSystemProject(Directory.GetCurrentDirectory())
-    .UseMemoryCachingProvider()
-    .Build());
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-//builder.Services.AddSingleton<IConverter, SynchronizedConverter>();
-
-//builder.Services.AddSingleton<PdfService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

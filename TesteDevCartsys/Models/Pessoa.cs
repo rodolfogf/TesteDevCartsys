@@ -15,5 +15,6 @@ public class Pessoa
     public DateTime DataNascimento { get; set; }
     [RegularExpression(@"^\d{11}$", ErrorMessage = "Formato inválido de CPF")]
     public string Cpf { get; set; }
+    [MinLength(1, ErrorMessage = "Deve haver pelo menos um contato para cadastrar uma pessoa")]
     public virtual ICollection<Contato> Contatos { get; set; }
 }

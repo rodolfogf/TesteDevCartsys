@@ -24,6 +24,8 @@ public class PessoaController : ControllerBase
     [HttpPost]
     public IActionResult AdicionaPessoa([FromBody] CreatePessoaDto pessoaDto)
     {
+        if (VerificaCpfExistente(pessoaDto.Cpf)) return Conflict("CPF já existente na base");
+
         var pessoa = _mapper.Map<Pessoa>(pessoaDto);
         _context.Pessoas.Add(pessoa);
         _context.SaveChanges();
@@ -87,4 +89,9 @@ public class PessoaController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("{cpf}")]
+    public bool VerificaCpfExistente(string cpf)
+    {
+        return _context.Pessoas.Any(p => p.Cpf.Equals(cpf));
+    }    
 }
